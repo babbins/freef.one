@@ -2,3 +2,12 @@ body {
   font-family: sans-serif;
   background-color: goldenrod;
 }
+
+button.toggle-play {
+  width: 200px;
+  height: 50px;
+}
+
+* + * {
+  margin-top: 10px;
+}

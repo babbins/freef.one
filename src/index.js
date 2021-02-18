@@ -7,9 +7,7 @@ import audioUrl from "./audio/og.m4a";
 
 document.getElementById("app").innerHTML = `
   <h1>freefone</h1>
-  <button disabled class="play" >play</button>
-  <button disabled class="pause">pause</button>
-  <button disabled class="delay">more delayyyy</button>
+  <button disabled class="toggle-play" >play</button>
   <div>
     <span>delayTime: </span>
     <span class="delay"></span>
@@ -40,30 +38,26 @@ const filter = new Tone.LowpassCombFilter({
 
 player.connect(filter);
 
-const playBtn = document.querySelector("button.play");
-const pauseBtn = document.querySelector("button.pause");
-const delayBtn = document.querySelector("button.delay");
+const togglePlayBtn = document.querySelector("button.toggle-play");
 const delaySpan = document.querySelector("span.delay");
 const resonanceSpan = document.querySelector("span.resonance");
 
 let isAudioContextStarted = false;
-
-playBtn.addEventListener("click", async () => {
-  if (!isAudioContextStarted) {
-    await Tone.start();
-    isAudioContextStarted = true;
+let isPlaying = false;
+togglePlayBtn.addEventListener("click", async () => {
+  if (isPlaying) {
+    Tone.Transport.pause();
+    togglePlayBtn.innerText = "play";
+  } else {
+    if (!isAudioContextStarted) {
+      await Tone.start();
+      isAudioContextStarted = true;
+    }
+    Tone.Transport.start();
+    togglePlayBtn.innerText = "pause";
   }
-  Tone.Transport.start();
-});
 
-pauseBtn.addEventListener("click", () => {
-  Tone.Transport.pause();
-});
-
-delayBtn.addEventListener("click", () => {
-  if (filter.delayTime.value < 1) {
-    filter.delayTime.value += 0.1;
-  }
+  isPlaying = !isPlaying;
 });
 
 const setFilter = throttle((x, y) => {
@@ -80,5 +74,6 @@ const setFilter = throttle((x, y) => {
 }, 50);
 
 document.addEventListener("mousemove", (event) => {
+  if (event.target === togglePlayBtn) return;
   setFilter(event.offsetX, event.offsetY);
 });
