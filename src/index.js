@@ -1,8 +1,8 @@
 import "./styles.css";
 import * as Tone from "tone";
-import { setLogger } from "tone/build/esm/core/util/Debug";
+import { throttle } from "lodash";
 
-const player = new Tone.Player("/audio/cutthroat.mp3").toMaster();
+const player = new Tone.Player("/audio/og.m4a").toMaster();
 // sync the Players to the Transport like this
 player.sync().start(0);
 player.volume.value = -10;
@@ -19,21 +19,19 @@ document.getElementById("app").innerHTML = `
   <button class="play" >play</button>
   <button class="pause">pause</button>
   <button class="delay">more delayyyy</button>
-  <span>Mouse X:  </span>
-  <span class="x"></span>
-  <span>Mouse Y:  </span>
-  <span class="y"></span>
-  <span>delayTime: </span>
-  <span class="delay"></span>
-  <span>resonance: </span>
-  <span class="resonance"></span>
+  <div>
+    <span>delayTime: </span>
+    <span class="delay"></span>
+  </div>
+  <div>
+    <span>resonance: </span>
+    <span class="resonance"></span>
+  </div>
 `;
 
 const playBtn = document.querySelector("button.play");
 const pauseBtn = document.querySelector("button.pause");
 const delayBtn = document.querySelector("button.delay");
-const xSpan = document.querySelector("span.x");
-const ySpan = document.querySelector("span.y");
 const delaySpan = document.querySelector("span.delay");
 const resonanceSpan = document.querySelector("span.resonance");
 
@@ -55,12 +53,9 @@ delayBtn.addEventListener("click", () => {
   }
 });
 
-document.addEventListener("mousemove", (event) => {
-  // console.log(window.innerWidth, event.offsetX);
-  xSpan.innerHTML = event.offsetX;
-  ySpan.innerHTML = event.offsetY;
-  const delayTime = event.offsetX / window.innerWidth;
-  const resonance = event.offsetY / window.innerHeight;
+const setFilter = throttle((x, y) => {
+  const delayTime = x / window.innerWidth;
+  const resonance = y / window.innerHeight;
   if (delayTime > 0 && delayTime < 1) {
     delaySpan.innerHTML = delayTime;
     filter.delayTime.value = delayTime;
@@ -69,4 +64,8 @@ document.addEventListener("mousemove", (event) => {
     resonanceSpan.innerHTML = resonance;
     filter.resonance.value = resonance;
   }
+}, 500);
+
+document.addEventListener("mousemove", (event) => {
+  setFilter(event.offsetX, event.offsetY);
 });
