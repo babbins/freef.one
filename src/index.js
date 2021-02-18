@@ -1,5 +1,5 @@
 import "regenerator-runtime/runtime";
-
+import "focus-visible";
 import "./styles.css";
 import * as Tone from "tone";
 import { throttle } from "lodash";

@@ -8,6 +8,7 @@
     "build": "parcel build index.html --public-url ./"
   },
   "dependencies": {
+    "focus-visible": "5.2.0",
     "lodash": "4.17.20",
     "tone": "14.7.77"
   },

@@ -1,13 +1,25 @@
 body {
   font-family: sans-serif;
-  background-color: goldenrod;
+  background: rgb(62, 66, 82);
+  background: linear-gradient(
+    90deg,
+    rgba(62, 66, 82, 1) 0%,
+    rgba(233, 148, 162, 1) 100%
+  );
 }
 
 button.toggle-play {
   width: 200px;
   height: 50px;
+  background-color: whitesmoke;
+  color: black;
+  cursor: pointer;
 }
 
 * + * {
   margin-top: 10px;
+}
+
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
 }
