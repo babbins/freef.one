@@ -2,6 +2,7 @@ import "./styles.css";
 import * as Tone from "tone";
 import { throttle } from "lodash";
 import audioUrl from "./audio/og.m4a";
+
 document.getElementById("app").innerHTML = `
   <h1>freefone</h1>
   <button disabled class="play" >play</button>
@@ -45,9 +46,9 @@ const resonanceSpan = document.querySelector("span.resonance");
 
 let isAudioContextStarted = false;
 
-playBtn.addEventListener("click", () => {
+playBtn.addEventListener("click", async () => {
   if (!isAudioContextStarted) {
-    Tone.start();
+    await Tone.start();
     isAudioContextStarted = true;
   }
   Tone.Transport.start();
