@@ -2,7 +2,30 @@ import "./styles.css";
 import * as Tone from "tone";
 import { throttle } from "lodash";
 
-const player = new Tone.Player("/audio/og.m4a").toMaster();
+document.getElementById("app").innerHTML = `
+  <h1>freefone</h1>
+  <button disabled class="play" >play</button>
+  <button disabled class="pause">pause</button>
+  <button disabled class="delay">more delayyyy</button>
+  <div>
+    <span>delayTime: </span>
+    <span class="delay"></span>
+  </div>
+  <div>
+    <span>resonance: </span>
+    <span class="resonance"></span>
+  </div>
+`;
+
+const player = new Tone.Player({
+  url: "src/audio/og.m4a",
+  onload: () => {
+    Array.from(document.querySelectorAll("button")).forEach((b) =>
+      b.removeAttribute("disabled")
+    );
+  }
+}).toDestination();
+
 // sync the Players to the Transport like this
 player.sync().start(0);
 player.volume.value = -10;
@@ -14,21 +37,6 @@ const filter = new Tone.LowpassCombFilter({
 
 player.connect(filter);
 
-document.getElementById("app").innerHTML = `
-  <h1>freefone</h1>
-  <button class="play" >play</button>
-  <button class="pause">pause</button>
-  <button class="delay">more delayyyy</button>
-  <div>
-    <span>delayTime: </span>
-    <span class="delay"></span>
-  </div>
-  <div>
-    <span>resonance: </span>
-    <span class="resonance"></span>
-  </div>
-`;
-
 const playBtn = document.querySelector("button.play");
 const pauseBtn = document.querySelector("button.pause");
 const delayBtn = document.querySelector("button.delay");
@@ -36,15 +44,11 @@ const delaySpan = document.querySelector("span.delay");
 const resonanceSpan = document.querySelector("span.resonance");
 
 playBtn.addEventListener("click", () => {
-  Tone.loaded().then(() => {
-    Tone.Transport.start();
-  });
+  Tone.Transport.start();
 });
 
 pauseBtn.addEventListener("click", () => {
-  Tone.loaded().then(() => {
-    Tone.Transport.pause();
-  });
+  Tone.Transport.pause();
 });
 
 delayBtn.addEventListener("click", () => {
@@ -64,7 +68,7 @@ const setFilter = throttle((x, y) => {
     resonanceSpan.innerHTML = resonance;
     filter.resonance.value = resonance;
   }
-}, 500);
+}, 50);
 
 document.addEventListener("mousemove", (event) => {
   setFilter(event.offsetX, event.offsetY);
