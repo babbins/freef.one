@@ -1,7 +1,7 @@
 import "./styles.css";
 import * as Tone from "tone";
 import { throttle } from "lodash";
-
+import audioUrl from "./audio/og.m4a";
 document.getElementById("app").innerHTML = `
   <h1>freefone</h1>
   <button disabled class="play" >play</button>
@@ -18,7 +18,7 @@ document.getElementById("app").innerHTML = `
 `;
 
 const player = new Tone.Player({
-  url: "src/audio/og.m4a",
+  url: audioUrl,
   onload: () => {
     Array.from(document.querySelectorAll("button")).forEach((b) =>
       b.removeAttribute("disabled")
