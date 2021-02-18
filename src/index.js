@@ -43,7 +43,13 @@ const delayBtn = document.querySelector("button.delay");
 const delaySpan = document.querySelector("span.delay");
 const resonanceSpan = document.querySelector("span.resonance");
 
+let isAudioContextStarted = false;
+
 playBtn.addEventListener("click", () => {
+  if (!isAudioContextStarted) {
+    Tone.start();
+    isAudioContextStarted = true;
+  }
   Tone.Transport.start();
 });
 
