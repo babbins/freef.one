@@ -1,3 +1,5 @@
+import "regenerator-runtime/runtime";
+
 import "./styles.css";
 import * as Tone from "tone";
 import { throttle } from "lodash";
